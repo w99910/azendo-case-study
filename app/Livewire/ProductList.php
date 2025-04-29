@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Models\Brand;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Category;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Collection;
+use Livewire\Attributes\On;
 
 class ProductList extends Component
 {
@@ -19,74 +22,179 @@ class ProductList extends Component
     public $selectedBrands = [];
     public $sortField = 'name';
     public $sortDirection = 'asc';
-    public $isActive = true;
+    public $isActive = '';
     public $stockMin = '';
     public $page = 1;
+    public $lastPage = 1;
     public $selectedView = 'grid';
+    public $perPage = 50;
+    public $selectedProducts = [];
 
-    protected $queryString = [];
+    public $newProduct = [
+        'name' => '',
+        'price' => '',
+        'stock' => '',
+        'category_id' => '',
+        'brand_id' => '',
+        'serial_number' => '',
+        'description' => '',
+        'is_active' => 1,
+    ];
+    public $createCategories = [];
+    public $createBrands = [];
+
+    public Collection $products;
+    public int $totalProducts = 0;
+
+    public function __construct()
+    {
+        $this->products = collect([]);
+    }
+
+    public function updatePage()
+    {
+        $this->syncProducts();
+    }
 
     public function sortBy($field)
     {
-        $this->sortField = $field;
+        if ($this->sortField == $field) {
+            $this->sortDirection = $this->sortDirection == 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
+        }
+
+        $this->syncProducts();
     }
 
     public function setView($view)
     {
         $this->selectedView = $view;
-        $this->resetPage();
+        // $this->resetPage();
+        $this->syncProducts();
+    }
+
+    public function syncProducts($clear = false)
+    {
+        $key = json_encode(get_object_vars($this));
+
+        if ($clear) {
+            Cache::forget('products-' . $key);
+        }
+
+        [$productsWithRelations, $totalProducts] = Cache::remember('products-' . $key, 60, function () {
+            $query = Product::query();
+
+            if ($this->search) {
+                $query = $query->where(function ($query) {
+                    $query->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('description', 'like', '%' . $this->search . '%');
+                });
+            }
+
+            if ($this->selectedCategories) {
+                $query = $query->whereIn('category_id', $this->selectedCategories);
+            }
+
+            if ($this->selectedBrands) {
+                $query = $query->whereIn('brand_id', $this->selectedBrands);
+            }
+
+            if ($this->stockMin) {
+                $query = $query->where('stock', '>=', $this->stockMin);
+            }
+
+            if ($this->priceMin) {
+                $query = $query->where('price', '>=', $this->priceMin);
+            }
+
+            if ($this->priceMax) {
+                $query = $query->where('price', '<=', $this->priceMax);
+            }
+
+            if ($this->isActive != '') {
+                $query = $query->where('is_active', (bool) $this->isActive);
+            }
+
+            $order = $this->sortDirection === 'desc' ? 'orderByDesc' : 'orderBy';
+            $query = $query->$order($this->sortField);
+
+            $totalProducts = $query->count();
+
+            $offset = ($this->page - 1) * $this->perPage;
+
+            $products = $query->skip($offset)->take($this->perPage)->get();
+
+            return [$products, $totalProducts];
+        });
+
+        $this->products = $productsWithRelations; // Corrected assignment
+        $this->totalProducts = $totalProducts;
+        $this->lastPage = ceil($totalProducts / $this->perPage);
+    }
+
+    public function mount()
+    {
+        $this->syncProducts();
     }
 
     public function render()
     {
-        $allProducts = Product::all();
-        
-        $filteredProducts = $allProducts->filter(function ($product) {
-            $matchesSearch = empty($this->search) || 
-                str_contains(strtolower($product->name), strtolower($this->search)) ||
-                str_contains(strtolower($product->description), strtolower($this->search));
-            
-            $matchesCategory = empty($this->selectedCategories) || 
-                in_array($product->category_id, $this->selectedCategories);
-                
-            $matchesBrand = empty($this->selectedBrands) || 
-                in_array($product->brand_id, $this->selectedBrands);
-                
-            
-            $matchesStock = empty($this->stockMin) || $product->stock >= $this->stockMin;
-            
-            return $matchesSearch && $matchesCategory && 
-                   $matchesBrand  && $matchesStock;
-        });
-        
-        $sortedProducts = $filteredProducts->sortBy($this->sortField, SORT_REGULAR, 
-            $this->sortDirection === 'desc');
-        
-        $perPage = 50;
-        $productsOnPage = $sortedProducts->slice(($this->page - 1) * $perPage, $perPage);
-        
-        $categories = Category::all();
-        $brands = Brand::all();
-        
-        $productsWithRelations = $productsOnPage->map(function ($product) {
-            $product->image = "https://picsum.photos/640/480?random=".$product->id;
-            return $product;
+        $categories = Cache::remember('categories', 60 * 5, function () {
+            return Category::all();
         });
 
-        
+        $brands = Cache::remember('brands', 60 * 5, function () {
+            return Brand::all();
+        });
+
         return view('livewire.product-list', [
-            'products' => $productsWithRelations,
             'categories' => $categories,
             'brands' => $brands,
-            'totalProducts' => $sortedProducts->count(),
-            'currentPage' => $this->page,
-            'perPage' => $perPage,
-            'lastPage' => ceil($sortedProducts->count() / $perPage),
+            'perPage' => $this->perPage,
         ]);
     }
-    
+
     public function goToPage($page)
     {
         $this->page = $page;
+        $this->syncProducts();
+    }
+
+    public function toggleProductSelection($productId)
+    {
+        if (($key = array_search($productId, $this->selectedProducts)) !== false) {
+            unset($this->selectedProducts[$key]);
+        } else {
+            $this->selectedProducts[] = $productId;
+        }
+    }
+
+    public function selectAll()
+    {
+        $this->selectedProducts = $this->products->pluck('id')->toArray();
+    }
+
+    public function clearSelection()
+    {
+        $this->selectedProducts = [];
+    }
+
+    public function deleteSelected($ids = null)
+    {
+        // $idsToDelete = $ids ?? $this->selectedProducts;
+        // Product::whereIn('id', $idsToDelete)->delete();
+        $this->clearSelection();
+        $this->syncProducts(true);
+        $this->js('toast', [
+            'message' => 'Selected products deleted successfully.',
+            'type' => 'success',
+        ]);
+    }
+
+    public function deselectAll()
+    {
+        $this->clearSelection();
     }
 }

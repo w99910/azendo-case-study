@@ -34,6 +34,7 @@ class ProductSeeder extends Seeder
                 'category_id' => $categories->random()->id,
                 'brand_id' => $brands->random()->id,
                 'attributes' => $attributes,
+                'image' => "https://picsum.photos/640/480?random=" . rand(1, 20000),
             ]);
         }
 
