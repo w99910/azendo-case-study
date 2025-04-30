@@ -18,9 +18,7 @@ class Product extends Model
         'is_active',
         'category_id',
         'brand_id',
-        'attributes',
-        'image',
-        'serial_number'
+        'attributes'
     ];
 
     protected $casts = [
@@ -28,21 +26,4 @@ class Product extends Model
         'is_active' => 'boolean',
         'attributes' => 'array',
     ];
-
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class, 'category_id');
-    }
-
-    public function brand(): BelongsTo
-    {
-        return $this->belongsTo(Brand::class, 'brand_id');
-    }
-
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(Review::class, 'product_id');
-    }
-
-
 }
