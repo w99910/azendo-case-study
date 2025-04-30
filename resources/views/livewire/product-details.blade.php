@@ -106,18 +106,18 @@
                         </div>
                     @endif
                 </div>
-                <div class="mt-4">
-                    @if ($editing)
-                        <button wire:click="save"
-                            class="inline-block bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded ml-2">Save</button>
-                        <button wire:click="$set('editing', false)"
-                            class="inline-block bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded ml-2">Cancel</button>
-                    @else
-                        <button wire:click="edit"
-                            class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded ml-2">Edit</button>
-                        <button wire:click="delete" wire:confirm="Are you sure you want to delete this product?"
-                            class="inline-block bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ml-2">Delete</button>
-                    @endif
+                <div x-show="expanded" class="mt-4">
+                    <button wire:click="save"
+                        class="inline-block bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded ml-2">Save</button>
+                    <button wire:click="editing = false"
+                        class="inline-block z-10 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded ml-2">Cancel</button>
+
+                </div>
+                <div x-show="!expanded" class="mt-4">
+                    <button wire:click="edit"
+                        class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded ml-2">Edit</button>
+                    <button wire:click="delete" wire:confirm="Are you sure you want to delete this product?"
+                        class="inline-block bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ml-2">Delete</button>
                 </div>
             </div>
         </div>
