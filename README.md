@@ -16,7 +16,7 @@ cp .env.example .env
 You can install the project without Docker or with Docker.
 
 
-### Installation without Docker
+### Method 1: Installation without Docker
 ```bash
 composer install && npm install && npm run build
 ```
@@ -36,7 +36,7 @@ php artisan serve
 http://localhost:8000/
 ```
 
-### Installation with Docker
+### Method 2: Installation with Docker
 
 - Start the Docker containers
 ```bash
