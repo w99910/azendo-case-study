@@ -154,7 +154,7 @@
                     <h3 class="text-lg font-semibold mb-1 text-zinc-900 dark:text-zinc-50">{{ product.name }}</h3>
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-lg font-bold text-blue-600 dark:text-blue-400">฿{{ product.price
-                            }}</span>
+                        }}</span>
                         <span class="text-xs font-medium px-2 py-0.5 rounded"
                             :class="product.stock > 0 ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
                             Stock: {{ product.stock }}
@@ -318,7 +318,7 @@ const filters = reactive({
     sortField: 'name',
     sortDirection: 'asc',
     page: 1,
-    perPage: 50,
+    perPage: 10,
 });
 
 const availableFilters = ref({

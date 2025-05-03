@@ -15,7 +15,8 @@
                 <span class="ml-1">Back to Products</span>
             </a>
             <div class="flex flex-col md:flex-row">
-                <div class="md:w-1/2 bg-gray-200 dark:bg-zinc-800 flex items-center justify-center px-8 py-16">
+                <div
+                    class="md:w-1/2 bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20 flex justify-center px-8 py-24">
                     <img :src="product.image || `https://picsum.photos/640/480?random=${product.id}`"
                         :alt="product.name" class="rounded-lg w-full h-80 object-cover">
                 </div>
@@ -48,11 +49,21 @@
                     </div>
                     <div class="mb-4">
                         <h3 class="text-lg font-semibold mb-1 text-zinc-900 dark:text-zinc-100">Description</h3>
-                        <div class="text-gray-700 dark:text-zinc-300" v-html="product.description"></div>
+                        <div class="text-gray-700 dark:text-zinc-300"
+                            v-show="product.description.length < 200 || showMore" v-html="product.description"></div>
+                        <p v-show="showMore" @click="showMore = false"
+                            class="text-blue-600 underline dark:text-blue-400 cursor-pointer">
+                            Hide
+                        </p>
+                        <p v-show="product.description.length > 200 && !showMore"
+                            class="text-gray-700 dark:text-zinc-300">
+                            {{ product.description.slice(100) }} .... <span @click="showMore = !showMore"
+                                class="text-blue-600 dark:text-blue-400 cursor-pointer underline">Read More</span>
+                        </p>
                     </div>
-                    <div class="mt-4">
+                    <div class="mt-4 self-end">
                         <a :href="product.product_link" target="_blank"
-                            class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded ml-2">Buy
+                            class="inline-block self-end bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded ml-2">Buy
                             Now</a>
                     </div>
                 </div>
@@ -63,6 +74,7 @@
 
 <script setup>
 import MinimalLayout from '../layouts/minimal.vue'
+import { ref } from 'vue';
 defineOptions({ layout: MinimalLayout })
 
 const props = defineProps({
@@ -72,6 +84,8 @@ const props = defineProps({
         default: null
     }
 });
+
+const showMore = ref(false);
 
 function goBack() {
     window.history.back();

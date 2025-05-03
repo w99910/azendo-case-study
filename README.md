@@ -15,28 +15,11 @@ cp .env.example .env
 
 You can install the project without Docker or with Docker.
 
+### Installation without Docker
 
-### Method 1: Installation without Docker
-```bash
-composer install && npm install && npm run build
-```
+You have to install the required database and ollama. So I recommend you to use Docker.
 
-- Migrate the database
-```bash
-php artisan migrate:fresh --seed
-```
-
-- Run the project
-```bash
-php artisan serve
-```
-
-- Open the application
-```bash
-http://localhost:8000/
-```
-
-### Method 2: Installation with Docker
+### Installation with Docker
 
 - Start the Docker containers
 ```bash
@@ -48,5 +31,3 @@ docker compose up -d --build
 # If you set the port to 8040, you can open the application by using the following URL.
 http://localhost:8040/
 ```
-
-- [] https://makeup-api.herokuapp.com/
