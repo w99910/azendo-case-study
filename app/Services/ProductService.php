@@ -103,6 +103,6 @@ class ProductService
 
     public function getProductsForYou(): Collection
     {
-        return Product::where('is_active', true)->orderByRaw('RAND()')->take(5)->get();
+        return Product::where('is_active', true)->orderByRaw('RAND()')->take(9)->get();
     }
 }

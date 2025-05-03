@@ -19,5 +19,10 @@ export default {
     getProducts: async (data: any) => {
         const response = await axios.post('/products', data);
         return response.data;
+    },
+
+    getProductById: async (id: number | string) => {
+        const response = await axios.get(`/products/${id}`);
+        return response.data;
     }
 }

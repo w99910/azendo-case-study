@@ -15,16 +15,16 @@
                         class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Search</label>
                     <input type="text" id="search" v-model="filters.search"
                         placeholder="Search by product name or description..."
-                        class="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-zinc-100 text-sm">
+                        class="w-full placeholder:text-zinc-500 dark:placeholder:text-zinc-400 px-3 py-2 border bg-zinc-50/30 border-zinc-300 dark:border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-zinc-100 text-sm">
                 </div>
                 <!-- Price Range -->
                 <div>
                     <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Price Range</label>
                     <div class="flex gap-2">
                         <input type="number" v-model="filters.priceMin" placeholder="Minimum price"
-                            class="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-zinc-100 text-sm">
+                            class="w-full placeholder:text-zinc-500 dark:placeholder:text-zinc-400 px-3 py-2 border border-zinc-300 bg-zinc-50/30 dark:border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-zinc-100 text-sm">
                         <input type="number" v-model="filters.priceMax" placeholder="Maximum price"
-                            class="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-zinc-100 text-sm">
+                            class="w-full placeholder:text-zinc-500 dark:placeholder:text-zinc-400 px-3 py-2 border border-zinc-300 bg-zinc-50/30 dark:border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-zinc-100 text-sm">
                     </div>
                 </div>
                 <!-- Minimum Stock -->
@@ -32,14 +32,14 @@
                     <label for="stockMin"
                         class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Minimum Stock</label>
                     <input type="number" id="stockMin" v-model="filters.stockMin" placeholder="Minimum stock"
-                        class="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-zinc-100 text-sm">
+                        class="w-full px-3 placeholder:text-zinc-500 dark:placeholder:text-zinc-400 py-2 border border-zinc-300 bg-zinc-50/30 dark:border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-zinc-100 text-sm">
                 </div>
                 <!-- Status -->
                 <div>
                     <label for="status"
                         class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Status</label>
                     <select id="status" v-model="filters.status"
-                        class="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-zinc-100 text-sm">
+                        class="w-full px-3 py-2 border border-zinc-300 bg-zinc-50/30 dark:border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-zinc-100 text-sm">
                         <option value="all">All</option>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
@@ -49,7 +49,7 @@
                 <div class="lg:row-start-2">
                     <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Categories</label>
                     <div
-                        class="max-h-32 overflow-y-auto border border-zinc-300 dark:border-zinc-600 rounded-md p-2 space-y-1 bg-zinc-50 dark:bg-zinc-700">
+                        class="max-h-32 overflow-y-auto border border-zinc-300 dark:border-zinc-600 rounded-md p-2 space-y-1 bg-zinc-50/30 dark:bg-zinc-700">
                         <div v-for="category in availableFilters.categories" :key="category.id"
                             class="flex items-center">
                             <input :id="'cat-' + category.id" type="checkbox" :value="category.id"
@@ -64,7 +64,7 @@
                 <div class="lg:row-start-2">
                     <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Brands</label>
                     <div
-                        class="max-h-32 overflow-y-auto border border-zinc-300 dark:border-zinc-600 rounded-md p-2 space-y-1 bg-zinc-50 dark:bg-zinc-700">
+                        class="max-h-32 overflow-y-auto border border-zinc-300 dark:border-zinc-600 rounded-md p-2 space-y-1 bg-zinc-50/30 dark:bg-zinc-700">
                         <div v-for="brand in availableFilters.brands" :key="brand.id" class="flex items-center">
                             <input :id="'brand-' + brand.id" type="checkbox" :value="brand.id" v-model="filters.brands"
                                 class="h-4 w-4 text-blue-600 border-zinc-300 rounded focus:ring-blue-500">

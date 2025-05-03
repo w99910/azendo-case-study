@@ -26,8 +26,8 @@
                             <div :class="[
                                 'max-w-xs lg:max-w-md xl:max-w-lg px-4 py-2 rounded-lg shadow',
                                 message.role === 'user'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-50',
+                                    ? 'bg-blue-500 text-white border border-blue-400 dark:border-blue-600'
+                                    : 'bg-zinc-50/30 border border-zinc-100 dark:border-zinc-600 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-50',
                                 message.products ? 'mb-2' : '' // Add margin if products are attached
                             ]">
                                 <p class="text-sm" v-html="message.content.trim()"></p>
@@ -35,8 +35,8 @@
                                 <div v-if="message.role === 'assistant' && message.thoughts && message.thoughts.length"
                                     class="mt-3">
                                     <button @click="toggleThoughts(message.id)"
-                                        class="text-xs text-blue-600 dark:text-blue-400 underline mb-2 focus:outline-none">
-                                        {{ expandedThoughts[message.id] ? 'Hide' : 'Show' }} Chain of Thoughts
+                                        class="text-xs cursor-pointer text-blue-600 dark:text-blue-400 underline mb-2 focus:outline-none">
+                                        {{ expandedThoughts[message.id] ? 'Hide' : 'Show' }} Thoughts
                                     </button>
                                     <div v-show="expandedThoughts[message.id]"
                                         class="border-l-2 border-blue-400 pl-4 mt-2">
@@ -103,7 +103,7 @@
                             <img :src="product.image" alt="Product Image" class="w-16 h-16 rounded-md" />
                             <div class="flex-1">
                                 <div class="font-medium text-sm text-zinc-900 dark:text-zinc-50 mb-0.5">{{ product.name
-                                    }}
+                                }}
                                 </div>
                                 <div class="text-xs text-zinc-500 dark:text-zinc-400 mb-1">{{ product.category }} - {{
                                     product.brand }}</div>
