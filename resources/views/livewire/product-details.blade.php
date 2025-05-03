@@ -102,7 +102,8 @@
                     </div>
                     <div class="mb-4">
                         <h3 class="text-lg font-semibold mb-1">Description</h3>
-                        <p class="text-gray-700">{{ $product->description }}</p>
+                        <div class="text-gray-700">{!! $product->description !!}
+                        </div>
                     </div>
                 </div>
                 <div x-show="expanded" class="mt-4">
@@ -113,6 +114,9 @@
 
                 </div>
                 <div x-show="!expanded" class="mt-4">
+                    <a href="{{ $product->product_link }}" target="_blank"
+                        class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded ml-2">Buy
+                        Now</a>
                     <button wire:click="edit"
                         class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded ml-2">Edit</button>
                     <button wire:click="delete" wire:confirm="Are you sure you want to delete this product?"

@@ -27,6 +27,7 @@ RUN apt-get update; \
     libsodium-dev \
     gnupg2 \
     git \
+    unzip \
     build-essential
 
 RUN apt-get -y autoremove \
@@ -98,9 +99,10 @@ ENV NVM_DIR /home/${USER}/.nvm
 
 ENV NVM_SH $NVM_DIR/nvm.sh
 
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-
-RUN export NVM_DIR=$NVM_DIR && \. $NVM_SH \
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash \
+    && export NVM_DIR="$HOME/.nvm" \
+    && [ -s "$NVM_DIR/nvm.sh" ] \
+    && . "$NVM_DIR/nvm.sh" \
     && nvm install --lts
 #######################################
 

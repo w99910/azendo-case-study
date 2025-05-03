@@ -106,7 +106,7 @@
 
             <div wire:loading.remove>
                 <div class="flex justify-between items-center mb-4">
-                    <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center mb-4">
                         <span class="font-bold">{{ number_format($totalProducts) }} products</span>
                         <button @click.prevent="selectAll()"
                             class="ml-4 px-3 py-1 rounded-lg border border-gray-400 bg-gray-50 hover:bg-gray-100 text-gray-700 font-semibold shadow-sm transition">Select
@@ -121,6 +121,7 @@
                                 }
                             "
                             class="ml-2 px-3 py-1 rounded-lg border border-red-400 bg-red-50 hover:bg-red-100 text-red-700 font-semibold shadow-sm transition">Delete</button>
+
                     </div>
                     <div>
                         <span class="mr-2">View:</span>
@@ -132,7 +133,15 @@
                             class="px-3 py-1 rounded-lg border border-blue-400 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold shadow-sm transition @if ($selectedView === 'table') bg-blue-600 text-white @endif">
                             table
                         </button>
-                        |
+                        <!-- Per Page Selector -->
+                        <label class="ml-3 font-semibold text-gray-700" for="perPage">Per page:</label>
+                        <select id="perPage" wire:model="perPage" wire:change="updatePage"
+                            class="mx-2 px-3 py-1.5 rounded-lg border focus:outline-none focus:border-blue-500 focus:ring-blue-500 focus:ring-2 border-gray-300 bg-white text-gray-700 font-semibold shadow-sm transition">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
                         <span class="mr-2">Sort by:</span>
                         <button wire:click="sortBy('name')"
                             class="px-3 py-1 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 text-gray-700 font-semibold shadow-sm transition @if ($sortField === 'name') !bg-blue-500 text-white @endif">

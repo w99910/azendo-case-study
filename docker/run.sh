@@ -28,11 +28,13 @@ initialStuff() {
 
     php artisan migrate
 
+    php artisan app:populate-data
+
     php artisan optimize:clear; \
     php artisan event:cache; \
     php artisan config:cache; \
     php artisan route:cache; \
-    php artisan storage:link 
+    php artisan storage:link  
 
     if [ -f ./package-lock.json ]; \
       then \
@@ -44,15 +46,6 @@ initialStuff() {
     npm run build
 }
 
-# runAnotherNPMPackage(){
-#     if [ -f ./app/Console/Commands/Export/Charts/package-lock.json ]; then
-#       echo 'exists' && \
-#       cd app/Console/Commands/Export/Charts && npm install
-#     fi
-# }
-
 initialStuff
-
-# runAnotherNPMPackage
 
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisor-app.conf
