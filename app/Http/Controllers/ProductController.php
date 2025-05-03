@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ProductController
 {
     public static function routes()
     {
         Route::post('/products', [ProductController::class, 'index'])->name('products.index');
+        Route::get('/product/{id}', [ProductController::class, 'productDetails'])->name('products.details');
         Route::post('/product/{id}', [ProductController::class, 'show'])->name('products.show');
         Route::post('/product/create', [ProductController::class, 'store'])->name('products.store');
         Route::post('/product/update', [ProductController::class, 'update'])->name('products.update');
@@ -23,6 +25,12 @@ class ProductController
 
     public function __construct(private ProductService $productService)
     {
+    }
+
+    public function productDetails($id)
+    {
+        $product = $this->productService->getProduct($id);
+        return Inertia::render('product', ['product' => $product]);
     }
 
     public function index(Request $request)

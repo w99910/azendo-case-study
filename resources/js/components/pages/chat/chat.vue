@@ -7,7 +7,7 @@
             <!-- Left Column: Chat Interface -->
             <transition name="chat-move">
                 <div :class="[
-                    'flex flex-col h-full absolute backdrop-blur-2xl bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20 rounded-lg shadow-md overflow-hidden border border-zinc-200/50 dark:border-zinc-700/50',
+                    'flex flex-col h-full absolute transition-all duration-500 ease-[cubic-bezier(0.35, 0, 0.65, 1)] backdrop-blur-2xl bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20 rounded-lg shadow-md overflow-hidden border border-zinc-200/50 dark:border-zinc-700/50',
                     messages.length > 0 ? 'w-8/12 left-0 translate-x-0' : 'w-full transform translate-x-1/2 -left-1/2'
                 ]">
                     <!-- Chat Header (Optional) -->
@@ -27,7 +27,7 @@
                                 'max-w-xs lg:max-w-md xl:max-w-lg px-4 py-2 rounded-lg shadow',
                                 message.role === 'user'
                                     ? 'bg-blue-500 text-white border border-blue-400 dark:border-blue-600'
-                                    : 'bg-zinc-50/30 border border-zinc-100 dark:border-zinc-600 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-50',
+                                    : 'bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20 border border-zinc-100 dark:border-zinc-600 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-50',
                                 message.products ? 'mb-2' : '' // Add margin if products are attached
                             ]">
                                 <p class="text-sm" v-html="message.content.trim()"></p>
@@ -63,11 +63,11 @@
 
                     <!-- Input Area -->
                     <div
-                        class="p-4 border-t border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 flex-shrink-0">
+                        class="p-4 border-t border-zinc-200 dark:border-zinc-700 bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20 flex-shrink-0">
                         <div class="flex items-center gap-2">
                             <input type="text" v-model="newMessage" @keyup.enter="sendMessage"
-                                placeholder="Ask about products or anything else..."
-                                class="flex-1 px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-zinc-100 text-sm" />
+                                placeholder="Ask about products or anything else..." :disabled="isLoading"
+                                class="flex-1 placeholder:text-zinc-400 px-3 py-2 focus:outline-none  dark:text-zinc-100 text-sm" />
                             <button @click="sendMessage" :disabled="!newMessage.trim() || isLoading"
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-medium p-2 rounded-md shadow transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
@@ -91,8 +91,10 @@
                     <div class="flex-1 overflow-y-auto p-4 space-y-3">
                         <!-- Placeholder for Products -->
                         <div v-show="isLoading" v-for="i in [0, 1, 2,]" :key="i"
-                            class="bg-zinc-50 animate-pulse dark:bg-zinc-800 rounded-lg shadow-sm p-3 border border-zinc-200 dark:border-zinc-700 flex gap-3 items-center">
-                            <div class="w-16 h-16 animate-pulse rounded-md bg-zinc-200 dark:bg-zinc-700"></div>
+                            class=" animate-pulse bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20 rounded-lg shadow-sm p-3 border border-zinc-200 dark:border-zinc-700 flex gap-3 items-center">
+                            <div
+                                class="w-16 h-16 animate-pulse rounded-md bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20">
+                            </div>
                             <div class="flex-1">
                                 <div class="font-medium text-sm text-zinc-900 dark:text-zinc-50 mb-0.5"></div>
                             </div>
@@ -110,8 +112,8 @@
                                 <div class="flex justify-between items-center">
                                     <span class="text-sm font-semibold text-blue-600 dark:text-blue-400">${{
                                         product.price }}</span>
-                                    <button
-                                        class="text-xs bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-200 px-2 py-1 rounded">View</button>
+                                    <a :href="`/product/${product.id}`" target="_blank"
+                                        class="text-xs bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-200 px-2 py-1 rounded">View</a>
                                 </div>
                             </div>
                         </div>
@@ -198,6 +200,10 @@ const sendMessage = async () => {
     // --- Simulate AI response --- Replace with actual API call
     aiResponse.message = ``; // Reset buffer for new response
 
+    sendMessageToAI(text);
+};
+
+const sendMessageToAI = async (text) => {
     chat(text, messages.value, (chunk) => {
         aiResponse.message += chunk; // Accumulate chunks
 
@@ -319,7 +325,7 @@ const sendMessage = async () => {
         suggestedProducts.value = [];
         scrollToBottom();
     });
-};
+}
 
 onMounted(() => {
     scrollToBottom();
@@ -338,7 +344,7 @@ onMounted(() => {
 
 .fade-slide-enter-active,
 .fade-slide-leave-active {
-    transition: opacity 0.8s, transform 0.8s;
+    transition: opacity 0.8s, transform 0.8s cubic-bezier(0.35, 0, 0.65, 1);
 }
 
 .fade-slide-enter-from,
@@ -357,7 +363,7 @@ onMounted(() => {
 .chat-move-enter-active,
 .chat-move-leave-active {
     transform-origin: center;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    /* transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); */
 }
 
 .chat-move-enter-from,

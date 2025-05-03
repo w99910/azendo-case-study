@@ -50,10 +50,10 @@
                                 <span class="text-xs ml-1">({{ product.reviews }} reviews)</span>
                             </div>
 
-                            <button
-                                class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-md transition-colors duration-200">
+                            <a :href="`/product/${product.id}`"
+                                class="mt-auto cursor-pointer self-end bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-md transition-colors duration-200">
                                 Details
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                     </template>
                     <template v-else>
                         <img :src="productOfToday.image" alt="Product of Today"
-                            class="w-1/2 h-full object-cover hover:scale-105 transition-all duration-300 rounded-lg" />
+                            class="h-64 aspect-square object-cover hover:scale-105 transition-all duration-300 rounded-lg" />
                         <div class="text-center md:text-left p-4">
                             <h3 class="text-sm font-medium uppercase tracking-wider mb-1 text-indigo-200">Product Of
                                 Today
@@ -79,10 +79,10 @@
                             <div class="text-xl font-bold mb-1">{{ productOfToday.name }}</div>
                             <div class="text-indigo-100 text-sm mb-3">{{ productOfToday.description.slice(0, 100) }}...
                             </div>
-                            <button
+                            <a :href="`/product/${productOfToday.id}`"
                                 class="bg-white text-indigo-600 hover:bg-indigo-50 text-sm font-medium py-2 px-4 rounded-md transition-colors duration-200">
                                 Learn More
-                            </button>
+                            </a>
                         </div>
                     </template>
                 </section>
@@ -92,8 +92,8 @@
                     <h3 class="text-xl font-semibold mb-4 text-zinc-800 dark:text-zinc-100">Popular Products</h3>
                     <div v-if="popularLoading" class="text-center py-10">Loading popular products...</div>
                     <div v-else class="flex-1 space-y-4">
-                        <div v-for="product in popularProducts" :key="product.id"
-                            class="backdrop-blur-2xl bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20 flex items-center gap-4 p-3 rounded-md border border-zinc-200/50 dark:border-zinc-700/50">
+                        <div @click="goToProduct(product.id)" v-for="product in popularProducts" :key="product.id"
+                            class="backdrop-blur-2xl cursor-pointer bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20 flex items-center gap-4 p-3 rounded-md border border-zinc-200/50 dark:border-zinc-700/50">
                             <img :src="product.image" alt="Product Image" class="w-10 h-10 object-cover rounded-md" />
                             <div class="flex-1">
                                 <div class="font-medium text-sm text-zinc-900 dark:text-zinc-50">{{ product.name }}
@@ -120,6 +120,10 @@ const productOfToday = ref({});
 const productOfTodayLoading = ref(true);
 const popularProducts = ref([]);
 const popularLoading = ref(true);
+
+function goToProduct(id) {
+    window.location.href = `/product/${id}`;
+}
 
 onMounted(async () => {
     const response = await product.getProductsForYou();

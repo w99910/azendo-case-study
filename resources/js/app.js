@@ -2,18 +2,34 @@ import './bootstrap';
 
 import '../css/app.css';
 
-import { createApp, ref } from 'vue';
+import { createApp, h } from 'vue';
 
-import App from './components/app.vue';
 import Home from './components/pages/home/home.vue';
 import Search from './components/pages/search/search.vue';
 import Chat from './components/pages/chat/chat.vue';
 
-const app = createApp(App);
+import { createInertiaApp } from '@inertiajs/vue3'
 
-app.component('home', Home);
-app.component('search', Search);
-app.component('chat', Chat);
+import DefaultLayout from './components/layouts/default.vue';
 
+createInertiaApp({
+    resolve: name => {
+        const pages = import.meta.glob('./components/pages/**/*.vue', { eager: true })
+        let page = pages[`./components/pages/${name}.vue`];
+        // If the page doesn't have a layout, set the default layout
+        if (page.default) {
+            page.default.layout = page.default.layout || DefaultLayout;
+        }
+        return page;
+    },
+    setup({ el, App, props, plugin }) {
+        const app = createApp({ render: () => h(App, props) });
+        app.use(plugin);
+        app.component('home', Home);
+        app.component('search', Search);
+        app.component('chat', Chat);
 
-app.mount('#app')
+        app.mount(el)
+    },
+})
+

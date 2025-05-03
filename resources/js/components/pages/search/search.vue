@@ -177,10 +177,10 @@
                         <span class="text-xs ml-1">({{ product.reviews.length }} reviews)</span>
                     </div>
 
-                    <button
-                        class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-md transition-colors duration-200">
+                    <a :href="`/product/${product.id}`"
+                        class="mt-auto cursor-pointer self-end bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-md transition-colors duration-200">
                         Details
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -214,6 +214,9 @@
                         <th scope="col"
                             class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-300 uppercase tracking-wider">
                             Serial</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-300 uppercase tracking-wider">
+                            Actions</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-zinc-900 divide-y divide-zinc-200 dark:divide-zinc-700">
@@ -243,6 +246,9 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-zinc-500 dark:text-zinc-400">{{
                             product.serial }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-zinc-500 dark:text-zinc-400">
+                            <a :href="`/product/${product.id}`" class="text-blue-600 hover:text-blue-700">View</a>
+                        </td>
                     </tr>
                     <tr v-if="products.length === 0">
                         <td colspan="9" class="px-6 py-10 text-center text-sm text-zinc-500 dark:text-zinc-400">

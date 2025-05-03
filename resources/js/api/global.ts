@@ -3,7 +3,7 @@ import { reactive } from "vue";
 export default {
     data: reactive({
         isDarkMode: false,
-        currentPage: 'search',
+        currentPage: 'home',
     })
 }
 

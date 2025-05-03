@@ -30,43 +30,24 @@
                 </button>
             </div>
         </nav>
-        <div class="flex-1 overflow-y-auto pb-20">
-            <Transition name="fade" mode="out-in">
-                <keep-alive>
-                    <component :is="global.data.currentPage" />
-                </keep-alive>
-            </Transition>
-        </div>
-        <!-- Enhanced Dock -->
-        <div class="fixed bottom-2 left-1/2 -translate-x-1/2 z-50">
-            <div class="flex gap-6 items-center px-4 py-3 rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700 bg-white/80 dark:bg-gray-900/60 backdrop-blur-lg ring-1 ring-black/10 dark:ring-white/10 transition-all duration-300"
-                style="box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);">
-                <DockButton icon="home" label="Home" :active="global.data.currentPage === 'home'"
-                    @click="setDock('home')" />
-                <DockButton icon="search" label="Search" :active="global.data.currentPage === 'search'"
-                    @click="setDock('search')" />
-                <DockButton icon="chat" label="Chat" :active="global.data.currentPage === 'chat'"
-                    @click="setDock('chat')" />
-            </div>
+        <div class="flex-1 overflow-y-auto">
+            <slot />
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, defineComponent, onMounted, onBeforeMount } from 'vue';
-import global from '../api/global';
-import DockButton from './ui/DockButton.vue';
-
+import global from '../../api/global';
+import { onBeforeMount } from 'vue';
 function toggleDark() {
     global.data.isDark = !global.data.isDark;
     document.documentElement.classList.toggle('dark', global.data.isDark);
-}
-function setDock(name) {
-    global.data.currentPage = name;
+
+    localStorage.setItem('isDark', global.data.isDark);
 }
 
 onBeforeMount(() => {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersDark = localStorage.getItem('isDark') !== null ? localStorage.getItem('isDark') === 'true' : window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     if (prefersDark) {
         document.documentElement.classList.add('dark');
@@ -77,7 +58,6 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
-/* Combined slide and fade transition */
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.2s ease, transform 0.2s ease;
@@ -86,21 +66,16 @@ onBeforeMount(() => {
 .fade-enter-from {
     opacity: 0;
     transform: translateY(10px);
-    /* Start slightly lower */
 }
 
 .fade-leave-to {
     opacity: 0;
     transform: translateY(-10px);
-    /* End slightly higher */
 }
 
-/* Base state (optional but good practice) */
 .fade-enter-to,
 .fade-leave-from {
     opacity: 1;
     transform: translateY(0);
 }
-
-/* Extra dock shadow/glassmorphism for modern look */
 </style>
