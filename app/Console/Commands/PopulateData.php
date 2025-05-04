@@ -94,7 +94,7 @@ class PopulateData extends Command
                 'id' => $product['id'],
                 'name' => $product['name'],
                 'description' => $product['description'],
-                'price' => (int) $product['price'] * 34,
+                'price' => ((int) $product['price'] * 34) ?? rand(100, 1000),
                 'stock' => rand(0, 100),
                 'is_active' => rand(0, 1) == 1,
                 'serial_number' => Str::uuid(),

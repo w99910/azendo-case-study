@@ -30,7 +30,7 @@ class Playground extends Command
     public function handle()
     {
         $qdrant = new QdrantService();
-        // dd($qdrant->deleteCollection('products'));
+        dd($qdrant->deleteCollection('products'));
         $ollama = new OllamaService();
         $productService = new ProductService();
 
