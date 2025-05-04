@@ -154,7 +154,7 @@
                     <h3 class="text-lg font-semibold mb-1 text-zinc-900 dark:text-zinc-50">{{ product.name }}</h3>
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-lg font-bold text-blue-600 dark:text-blue-400">฿{{ product.price
-                            }}</span>
+                        }}</span>
                         <span class="text-xs font-medium px-2 py-0.5 rounded"
                             :class="product.stock > 0 ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
                             Stock: {{ product.stock }}
@@ -263,7 +263,7 @@
         <div v-if="!loading && pagination.totalPages > 1" class="mt-8 flex justify-end py-4">
             <div class="flex flex-wrap justify-center items-center space-x-1">
                 <!-- Previous Button -->
-                <button @click="changePage(pagination.currentPage - 1)" :disabled="pagination.currentPage <= 1"
+                <button @click="changePage(filters.page - 1)" :disabled="filters.page <= 1"
                     class="px-3 py-1 rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 font-semibold shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed">
                     &laquo;
                 </button>
@@ -273,14 +273,13 @@
                     <span v-if="page === '...'" class="px-2 text-zinc-500 dark:text-zinc-400">...</span>
                     <button v-else @click="changePage(page)"
                         class="px-3 py-1 rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 font-semibold shadow-sm transition"
-                        :class="{ '!bg-blue-600 !text-white': page === pagination.currentPage }">
+                        :class="{ '!bg-blue-600 !text-white': page === filters.page }">
                         {{ page }}
                     </button>
                 </template>
 
                 <!-- Next Button -->
-                <button @click="changePage(pagination.currentPage + 1)"
-                    :disabled="pagination.currentPage >= pagination.totalPages"
+                <button @click="changePage(filters.page + 1)" :disabled="filters.page >= pagination.totalPages"
                     class="px-3 py-1 rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 font-semibold shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed">
                     Next
                 </button>
@@ -327,7 +326,6 @@ const availableFilters = ref({
 });
 
 const pagination = reactive({
-    currentPage: 1,
     totalPages: 1 // This would be calculated based on total products
 });
 
@@ -382,8 +380,8 @@ onMounted(() => {
 
 // --- Pagination Logic ---
 const changePage = (newPage) => {
-    if (newPage >= 1 && newPage <= pagination.totalPages && newPage !== pagination.currentPage) {
-        pagination.currentPage = newPage;
+    if (newPage >= 1 && newPage <= pagination.totalPages && newPage !== filters.page) {
+        filters.page = newPage;
         getProducts();
     }
 };
@@ -391,7 +389,7 @@ const changePage = (newPage) => {
 // --- Pagination Window Logic ---
 const windowSize = 2; // Corresponds to $side in PHP example
 const paginationWindow = computed(() => {
-    const current = pagination.currentPage;
+    const current = filters.page;
     const last = pagination.totalPages;
     const delta = windowSize;
 
@@ -435,7 +433,7 @@ watch(() => ({
 }), () => {
     if (timeout) clearTimeout(timeout);
     timeout = setTimeout(() => {
-        pagination.currentPage = 1; // Reset to page 1 on filter change
+        filters.page = 1; // Reset to page 1 on filter change
         getProducts();
     }, 400);
 });
@@ -443,7 +441,7 @@ watch(() => ({
 // Watch perPage changes separately
 watch(() => filters.perPage, (newPerPage) => {
     // No need to sync filters.perPage here as getProducts reads from pagination.perPage
-    pagination.currentPage = 1; // Reset page
+    filters.page = 1; // Reset page
     getProducts();
 });
 
