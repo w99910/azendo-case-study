@@ -105,7 +105,7 @@
                             <img :src="product.image" alt="Product Image" class="w-16 h-16 rounded-md" />
                             <div class="flex-1">
                                 <div class="font-medium text-sm text-zinc-900 dark:text-zinc-50 mb-0.5">{{ product.name
-                                    }}
+                                }}
                                 </div>
                                 <div class="text-xs text-zinc-500 dark:text-zinc-400 mb-1">{{ product.category }} - {{
                                     product.brand }}</div>
@@ -200,7 +200,7 @@ const sendMessage = async () => {
     // --- Simulate AI response --- Replace with actual API call
     aiResponse.message = ``; // Reset buffer for new response
 
-    // sendMessageToAI(text);
+    sendMessageToAI(text);
 };
 
 const sendMessageToAI = async (text) => {
