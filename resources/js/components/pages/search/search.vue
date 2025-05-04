@@ -294,7 +294,7 @@ import { ref, reactive, onMounted, watch, computed } from 'vue';
 import productApi from '../../../api/product'; // Assuming API file path
 import categoryApi from '../../../api/category';
 import brandApi from '../../../api/brand';
-
+import Toaster from 'vanilla-toaster';
 const viewMode = ref('grid'); // 'grid' or 'table'
 
 const loading = ref(true);
@@ -348,11 +348,17 @@ const getProducts = async () => {
     loading.value = true;
     try {
         // TODO: Pass filters, sorting, pagination to the API call
-        const [response, total] = await productApi.getProducts({ ...filters });
-        products.value = response;
-        pagination.totalPages = Math.ceil(total / filters.perPage);
+        productApi.getProducts({ ...filters }).then((r) => {
+            const [response, total] = r;
+            products.value = response;
+            pagination.totalPages = Math.ceil(total / filters.perPage);
+        }).catch((error) => {
+            console.error("Failed to fetch products:", error);
+            Toaster.toast(error.response?.data?.message ?? 'Failed to fetch products', 'error');
+        });
     } catch (error) {
         console.error("Failed to fetch products:", error);
+        Toaster.toast(error.message, 'error');
         // Handle error display if needed
     } finally {
         loading.value = false;

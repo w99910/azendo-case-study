@@ -11,6 +11,8 @@ import Chat from './components/pages/chat/chat.vue';
 import { createInertiaApp } from '@inertiajs/vue3'
 
 import DefaultLayout from './components/layouts/default.vue';
+import Toaster from 'vanilla-toaster';
+
 
 createInertiaApp({
     resolve: name => {
@@ -30,6 +32,10 @@ createInertiaApp({
         app.component('chat', Chat);
 
         app.mount(el)
+
+        const toaster = document.createElement('div');
+        document.body.appendChild(toaster);
+        new Toaster(toaster);
     },
 })
 

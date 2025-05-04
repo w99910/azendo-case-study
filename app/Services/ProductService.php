@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Validator;
 
 class ProductService
 {
@@ -37,6 +38,29 @@ class ProductService
 
     public function searchProducts(array $data): array
     {
+        $validator = Validator::make($data, [
+            'search' => 'nullable|string',
+            'categories' => 'nullable|array',
+            'brands' => 'nullable|array',
+            'stockMin' => 'nullable|integer',
+            'priceMin' => 'nullable|integer',
+            'priceMax' => 'nullable|integer',
+            'status' => 'nullable|string',
+            'isActive' => 'nullable|boolean',
+            'sortField' => 'nullable|string',
+            'sortDirection' => 'nullable|string',
+            'page' => 'nullable|integer',
+            'perPage' => 'nullable|integer',
+        ]);
+
+        if ($validator->fails()) {
+            $errorMessage = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errorMessage .= $error . "\n";
+            }
+            throw new \Exception($errorMessage, 401);
+        }
+
         $query = Product::query()->with(['category', 'brand', 'reviews']);
 
         if (!empty($data['search'])) {

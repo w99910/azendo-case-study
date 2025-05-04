@@ -4,7 +4,7 @@
         x-transition:enter="transition-all ease-in-out duration-500" x-transition:enter-start="scale-95 opacity-50"
         x-transition:enter-end="scale-100 opacity-100" x-transition:leave="transition-all ease-in-out duration-500"
         x-transition:leave-start="scale-100 opacity-100" x-transition:leave-end="scale-95 opacity-50">
-        <a href="/" class="absolute top-3 left-2  text-blue-600 px-3 py-2 rounded-lg flex items-center z-10">
+        <a href="/admin/" class="absolute top-3 left-2  text-blue-600 px-3 py-2 rounded-lg flex items-center z-10">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-chevron-left-icon w-4 h-4 inline-block lucide-chevron-left">

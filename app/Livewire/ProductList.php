@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Brand;
 use App\Models\Product;
+use App\Services\ProductService;
 use Livewire\Component;
 use App\Models\Category;
 use Livewire\WithPagination;
@@ -84,54 +85,37 @@ class ProductList extends Component
         }
 
         [$productsWithRelations, $totalProducts] = Cache::remember('products-' . $key, 60, function () {
-            $query = Product::query();
+            $productService = new ProductService();
 
-            if ($this->search) {
-                $query = $query->where(function ($query) {
-                    $query->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('description', 'like', '%' . $this->search . '%');
-                });
+            try {
+                return $productService->searchProducts([
+                    'search' => $this->search,
+                    'priceMin' => $this->priceMin,
+                    'priceMax' => $this->priceMax,
+                    'stockMin' => $this->stockMin,
+                    'categories' => $this->selectedCategories,
+                    'brands' => $this->selectedBrands,
+                    'sortField' => $this->sortField,
+                    'sortDirection' => $this->sortDirection,
+                    'isActive' => $this->isActive,
+                    'page' => $this->page,
+                    'perPage' => $this->perPage,
+                ]);
+            } catch (\Exception $e) {
+                $this->js('toast', [
+                    'message' => $e->getMessage(),
+                    'type' => 'error',
+                ]);
+
+                return [null, null];
             }
-
-            if ($this->selectedCategories) {
-                $query = $query->whereIn('category_id', $this->selectedCategories);
-            }
-
-            if ($this->selectedBrands) {
-                $query = $query->whereIn('brand_id', $this->selectedBrands);
-            }
-
-            if ($this->stockMin) {
-                $query = $query->where('stock', '>=', $this->stockMin);
-            }
-
-            if ($this->priceMin) {
-                $query = $query->where('price', '>=', $this->priceMin);
-            }
-
-            if ($this->priceMax) {
-                $query = $query->where('price', '<=', $this->priceMax);
-            }
-
-            if ($this->isActive != '') {
-                $query = $query->where('is_active', (bool) $this->isActive);
-            }
-
-            $order = $this->sortDirection === 'desc' ? 'orderByDesc' : 'orderBy';
-            $query = $query->$order($this->sortField);
-
-            $totalProducts = $query->count();
-
-            $offset = ($this->page - 1) * $this->perPage;
-
-            $products = $query->skip($offset)->take($this->perPage)->get();
-
-            return [$products, $totalProducts];
         });
 
-        $this->products = $productsWithRelations; // Corrected assignment
-        $this->totalProducts = $totalProducts;
-        $this->lastPage = ceil($totalProducts / $this->perPage);
+        if ($productsWithRelations) {
+            $this->products = $productsWithRelations; // Corrected assignment
+            $this->totalProducts = $totalProducts;
+            $this->lastPage = ceil($totalProducts / $this->perPage);
+        }
     }
 
     public function mount()

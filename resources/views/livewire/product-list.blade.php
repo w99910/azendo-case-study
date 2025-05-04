@@ -37,10 +37,10 @@
                 <div>
                     <label class="block mb-2 font-semibold text-gray-700">Price Range:</label>
                     <div class="flex space-x-2">
-                        <input wire:change="updatePage" type="text" wire:model="priceMin"
+                        <input wire:change="updatePage" type="number" wire:model="priceMin"
                             class="w-full focus:outline-none border border-gray-300 rounded-lg p-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition placeholder-gray-400"
                             placeholder="Minimum price">
-                        <input wire:change="updatePage" type="text" wire:model="priceMax"
+                        <input wire:change="updatePage" type="number" wire:model="priceMax"
                             class="w-full focus:outline-none border border-gray-300 rounded-lg p-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition placeholder-gray-400"
                             placeholder="Maximum price">
                     </div>
@@ -48,7 +48,7 @@
 
                 <div>
                     <label class="block mb-2 font-semibold text-gray-700">Minimum Stock:</label>
-                    <input wire:change="updatePage" type="text" wire:model="stockMin"
+                    <input wire:change="updatePage" type="number" wire:model="stockMin"
                         class="w-full focus:outline-none border border-gray-300 rounded-lg p-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition placeholder-gray-400"
                         placeholder="Minimum stock">
                 </div>
