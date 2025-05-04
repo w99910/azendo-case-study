@@ -51,14 +51,13 @@
                         <h3 class="text-lg font-semibold mb-1 text-zinc-900 dark:text-zinc-100">Description</h3>
                         <div class="text-gray-700 dark:text-zinc-300"
                             v-show="product.description.length < 200 || showMore" v-html="product.description"></div>
-                        <p v-show="showMore" @click="showMore = false"
-                            class="text-blue-600 underline dark:text-blue-400 cursor-pointer">
-                            Hide
-                        </p>
+
                         <p v-show="product.description.length > 200 && !showMore"
-                            class="text-gray-700 dark:text-zinc-300">
-                            {{ product.description.slice(100) }} .... <span @click="showMore = !showMore"
-                                class="text-blue-600 dark:text-blue-400 cursor-pointer underline">Read More</span>
+                            class="text-gray-700 dark:text-zinc-300" v-html="product.description.slice(100) + ' .... '">
+                        </p>
+                        <p @click="showMore = !showMore" v-text="showMore ? 'Hide' : 'Read More'"
+                            class="text-blue-600 underline dark:text-blue-400 cursor-pointer">
+
                         </p>
                     </div>
                     <div class="mt-4 self-end">
@@ -88,7 +87,7 @@ const props = defineProps({
 const showMore = ref(false);
 
 function goBack() {
-    window.history.back();
+    window.location.href = '/';
 }
 
 function formatPrice(price) {

@@ -41,10 +41,10 @@ class PopulateData extends Command
         $points = [];
         $payloads = [];
 
-        $existingProductIds = Product::all()->pluck('id')->toArray();
+        $existingProductIds = Product::orderBy('id', 'desc')->pluck('id')->toArray();
         $newProductIds = [];
 
-        $startIndex = count($existingProductIds);
+        $startIndex = $existingProductIds[0] ?? 0;
 
         $ollama = new OllamaService();
         $qdrant = new QdrantService(collectionName: $collectionName);
@@ -121,6 +121,7 @@ class PopulateData extends Command
                 $syncPointsAndPayloads();
             }
 
+            $existingProductIds[] = $_product->id;
             $newProductIds[] = $_product->id;
 
             $bar->advance();

@@ -1,14 +1,14 @@
 <template>
-    <div class="container mx-auto h-full py-4 md:py-6 lg:py-8">
+    <div class="container mx-auto h-full py-4 md:py-6 lg:py-8 overflow-y-auto sm:overflow-hidden">
         <div :class="[
-            'w-full flex relative h-full gap-x-4 ',
+            'w-full flex flex-col sm:flex-row relative h-full gap-4',
             messages.length > 0 ? '' : 'justify-center'
         ]">
             <!-- Left Column: Chat Interface -->
             <transition name="chat-move">
                 <div :class="[
-                    'flex flex-col h-full absolute transition-all duration-500 ease-[cubic-bezier(0.35, 0, 0.65, 1)] backdrop-blur-2xl bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20 rounded-lg shadow-md overflow-hidden border border-zinc-200/50 dark:border-zinc-700/50',
-                    messages.length > 0 ? 'w-8/12 left-0 translate-x-0' : 'w-full transform translate-x-1/2 -left-1/2'
+                    'flex flex-col shrink-0 h-full sm:absolute transition-all duration-500 ease-[cubic-bezier(0.35, 0, 0.65, 1)] backdrop-blur-2xl bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20 rounded-lg shadow-md overflow-hidden border border-zinc-200/50 dark:border-zinc-700/50',
+                    messages.length > 0 ? 'w-full sm:w-8/12 sm:left-0 translate-x-0' : 'w-full sm:w-full transform sm:translate-x-1/2 sm:-left-1/2'
                 ]">
                     <!-- Chat Header (Optional) -->
                     <div class="p-4 border-b border-zinc-200 dark:border-zinc-700 flex-shrink-0">
@@ -84,7 +84,7 @@
             <!-- Right Column: Suggested Products -->
             <transition name="fade-slide">
                 <div v-if="messages.length > 0"
-                    class="w-[32%] absolute right-0 backdrop-blur-2xl bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20 justify-self-end rounded-lg shadow-md overflow-hidden flex flex-col h-full border border-zinc-200/50 dark:border-zinc-700/50">
+                    class="w-full shrink-0 h-[60dvh] sm:h-full sm:w-[32%] sm:absolute right-0 backdrop-blur-2xl bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20 justify-self-end rounded-lg shadow-md overflow-hidden flex flex-col border border-zinc-200/50 dark:border-zinc-700/50">
                     <div class="p-4 border-b border-zinc-200 dark:border-zinc-700 flex-shrink-0">
                         <h2 class="text-lg font-semibold text-zinc-800 dark:text-zinc-100">Suggested Products</h2>
                     </div>
@@ -101,11 +101,11 @@
                         </div>
 
                         <div v-show="!isLoading" v-for="product in suggestedProducts" :key="product.id"
-                            class="bg-zinc-50 dark:bg-zinc-800 rounded-lg shadow-sm p-3 border border-zinc-200 dark:border-zinc-700 flex gap-3 items-center">
+                            class="bg-gradient-to-br from-white/40 via-blue-100/30 to-blue-200/20 dark:from-zinc-800/40 dark:via-indigo-900/30 dark:to-zinc-900/20 rounded-lg shadow-sm p-3 border border-zinc-200 dark:border-zinc-700 flex gap-3 items-center">
                             <img :src="product.image" alt="Product Image" class="w-16 h-16 rounded-md" />
                             <div class="flex-1">
                                 <div class="font-medium text-sm text-zinc-900 dark:text-zinc-50 mb-0.5">{{ product.name
-                                }}
+                                    }}
                                 </div>
                                 <div class="text-xs text-zinc-500 dark:text-zinc-400 mb-1">{{ product.category }} - {{
                                     product.brand }}</div>
@@ -200,7 +200,7 @@ const sendMessage = async () => {
     // --- Simulate AI response --- Replace with actual API call
     aiResponse.message = ``; // Reset buffer for new response
 
-    sendMessageToAI(text);
+    // sendMessageToAI(text);
 };
 
 const sendMessageToAI = async (text) => {
