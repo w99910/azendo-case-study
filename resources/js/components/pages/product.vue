@@ -33,7 +33,7 @@
                     <div class="mb-2">
                         <span class="text-gray-600 dark:text-zinc-400">Stock:</span>
                         <span :class="['font-semibold', product.stock < 10 ? 'text-red-500' : '']">{{ product.stock
-                            }}</span>
+                        }}</span>
                     </div>
                     <div class="mb-2">
                         <span class="text-gray-600 dark:text-zinc-400">Category:</span>
@@ -50,10 +50,11 @@
                     <div class="mb-4">
                         <h3 class="text-lg font-semibold mb-1 text-zinc-900 dark:text-zinc-100">Description</h3>
                         <div class="text-gray-700 dark:text-zinc-300"
-                            v-show="product.description.length < 100 || showMore" v-html="product.description"></div>
+                            v-show="product.description.length < 200 || showMore" v-html="product.description"></div>
 
-                        <p v-show="product.description.length > 100 && !showMore"
-                            class="text-gray-700 dark:text-zinc-300" v-html="product.description.slice(100) + ' .... '">
+                        <p v-show="product.description.length > 200 && !showMore"
+                            class="text-gray-700 dark:text-zinc-300"
+                            v-html="product.description.substring(0, 200) + ' .... '">
                         </p>
                         <p @click="showMore = !showMore" v-text="showMore ? 'Hide' : 'Read More'"
                             class="text-blue-600 underline dark:text-blue-400 cursor-pointer">
