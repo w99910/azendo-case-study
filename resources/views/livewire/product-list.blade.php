@@ -223,7 +223,7 @@
                                         </div>
                                     </div>
                                     <div class="mt-2 flex justify-end">
-                                        <a href="/products/{{ $product->id }}" target="_blank"
+                                        <a href="/admin/products/{{ $product->id }}" target="_blank"
                                             class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow transition">Details</a>
                                     </div>
                                 </div>
@@ -290,7 +290,7 @@
                                         </span>
                                     </td>
                                     <td class="py-2 px-4 border">
-                                        <a href="/products/{{ $product->id }}" target="_blank"
+                                        <a href="/admin/products/{{ $product->id }}" target="_blank"
                                             class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
                                             Details
                                         </a>

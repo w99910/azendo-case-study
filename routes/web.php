@@ -19,6 +19,6 @@ BrandController::routes();
 CategoryController::routes();
 ChatController::routes();
 
-Route::get('/products/{id}', ProductDetails::class)->name('products.details');
+Route::get('/admin/products/{id}', ProductDetails::class)->name('products.details');
 Route::get('/', fn() => Inertia::render('app'))->name('app');
 
